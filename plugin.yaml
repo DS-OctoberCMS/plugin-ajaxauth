@@ -1,0 +1,6 @@
+plugin:
+    name: 'wbry.ajaxauth::lang.plugin.name'
+    description: 'wbry.ajaxauth::lang.plugin.description'
+    author: Weberry
+    icon: oc-icon-user-plus
+    homepage: ''
