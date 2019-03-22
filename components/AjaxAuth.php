@@ -2,11 +2,14 @@
 
 namespace Wbry\AjaxAuth\Components;
 
+use App;
 use Lang;
 use Flash;
 use Session;
 use Request;
+use Wbry\Base\Classes\Helpers;
 use Cms\Classes\ComponentBase;
+use October\Rain\Auth\AuthException;
 
 /**
  * Ajax auth component
@@ -22,6 +25,31 @@ class AjaxAuth extends ComponentBase
             'name'        => 'wbry.ajaxauth::lang.components.name',
             'description' => 'wbry.ajaxauth::lang.components.description'
         ];
+    }
+
+    public function init()
+    {
+        App::error(function(AuthException $e)
+        {
+            Helpers::setLocale();
+            $appLocal = App::getLocale();
+            $authMessage = $e->getMessage();
+
+            if ($appLocal == 'en')
+                return $authMessage;
+
+            // For error messages see October\Rain\Auth\Manager
+            if (strrpos($authMessage,'hashed credential') !== false ||
+                strrpos($authMessage,'user was not found') !== false ||
+                strrpos($authMessage,'not activated') !== false)
+            {
+                return Lang::get('wbry.ajaxauth::lang.components.ajax_auth.msg.error_login_data');
+            }
+            elseif (strrpos($authMessage,'has been suspended') !== false)
+                return Lang::get('wbry.ajaxauth::lang.components.ajax_auth.msg.error_user_blocked');
+            else
+                return $authMessage;
+        });
     }
 
     public function onRun()
