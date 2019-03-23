@@ -7,7 +7,6 @@ use Lang;
 use Flash;
 use Session;
 use Request;
-use Wbry\Base\Classes\Helpers;
 use Cms\Classes\ComponentBase;
 use October\Rain\Auth\AuthException;
 
@@ -31,7 +30,6 @@ class AjaxAuth extends ComponentBase
     {
         App::error(function(AuthException $e)
         {
-            Helpers::setLocale();
             $appLocal = App::getLocale();
             $authMessage = $e->getMessage();
 
