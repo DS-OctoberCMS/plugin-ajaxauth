@@ -61,7 +61,7 @@ class AjaxAuth extends ComponentAccount
         parent::onRun();
 
         if ($code = $this->activationCode())
-            return Redirect::to($this->property('redirect', '/'));
+            return Redirect::to($this->property('redirect', '/') ?: '/');
 
         if (Session::has('ajax_auth_events'))
         {
