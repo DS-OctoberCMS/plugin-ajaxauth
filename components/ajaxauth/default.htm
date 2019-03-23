@@ -1,0 +1,112 @@
+{% set defaultResetCode = 'code' %}
+{% set resetCode  = resetPassword.code %}
+{% set valResetCode = (resetCode == defaultResetCode) ? '' : resetCode %}
+{% set isRestCode = resetCode ? true : false %}
+
+<div class="block-signin">
+
+    <div class="text-center mb-4 pb-1">
+        <h1 class="h2 mb-3 font-weight-normal">ЛИЧНЫЙ КАБИНЕТ</h1>
+    </div>
+
+    <form class="form-auth"
+          style="{{ isRestCode ? 'display: none;' }}"
+          data-request="onS"
+          data-request-validate
+          data-request-flash>
+
+        <div class="alert alert-danger" data-validate-error>
+            <p data-message></p>
+        </div>
+
+        <div class="form-label-group">
+            <input type="email" name="email" id="authInputEmail" class="form-control fixForDefaultValBrowser" placeholder="Email" required>
+            <label for="authInputEmail">Email</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="password" name="password" id="authInputPassword" class="form-control fixForDefaultValBrowser" placeholder="Пароль" required>
+            <label for="authInputPassword">Пароль</label>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="remember" value="remember"> Запомнить меня
+                </label>
+            </div>
+            <div class="col-md-6 text-right checkbox mb-3">
+                <a class="forgot-link" href="javascript:void(0)">Забыли пароль?</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 pr-md-1">
+                <button class="btn btn-lg btn-primary btn-block" name="signUp" type="button">Регистрация</button>
+            </div>
+            <div class="col-md-6 pl-md-1">
+                <button class="btn btn-lg btn-success btn-block" name="signIn" type="button">Войти</button>
+            </div>
+        </div>
+    </form>
+
+    <form class="form-forgot"
+          style="display: none;"
+          data-request="onS"
+          data-request-validate
+          data-request-flash
+          data-request-redirect="/?reset={{ defaultResetCode }}">
+
+        <div class="alert alert-danger" data-validate-error>
+            <p data-message></p>
+        </div>
+
+        <div class="form-label-group">
+            <input type="email" name="email" id="authInputEmailForgot" class="form-control" placeholder="Email" required>
+            <label for="authInputEmailForgot">Email</label>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 pr-md-1">
+                <button class="btn btn-lg btn-primary btn-block" name="forgotBack" type="button">&lt;&nbsp;&nbsp;Назад</button>
+            </div>
+            <div class="col-md-6 pl-md-1">
+                <button class="btn btn-lg btn-success btn-block" name="restore" type="button">Восстановить</button>
+            </div>
+        </div>
+    </form>
+
+    {% if isRestCode %}
+    <form class="form-reset"
+          data-request="onS"
+          data-request-validate
+          data-request-flash
+          data-request-redirect="/">
+
+        <div class="alert alert-danger" data-validate-error>
+            <p data-message></p>
+        </div>
+
+        <div class="form-label-group">
+            <input type="email" name="code" value="{{ valResetCode }}" id="authInputCode" class="form-control" placeholder="Код восстановления" required>
+            <label for="authInputCode">Код восстановления</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="password" name="password" id="authInputNewPass" class="form-control" placeholder="Новый пароль" required>
+            <label for="authInputNewPass">Новый пароль</label>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 pr-md-1">
+                <button class="btn btn-lg btn-primary btn-block" name="resetBack" type="button">&lt;&nbsp;&nbsp;Назад</button>
+            </div>
+            <div class="col-md-6 pl-md-1">
+                <button class="btn btn-lg btn-success btn-block" name="reset" type="button">Сменить пароль</button>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+
+    <p class="mt-5 mb-3 text-muted text-center">&copy; {{ date()|date("Y") }}</p>
+</div>
