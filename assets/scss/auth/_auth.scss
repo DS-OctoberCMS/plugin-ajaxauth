@@ -1,0 +1,39 @@
+//html,
+//body {
+//  height: 100%;
+//}
+
+body.auth-body {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.block-signin {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
+
+  > div {
+    padding-bottom: 0.1rem;
+  }
+
+  h1 {
+    color: #ff9c21;
+    text-shadow: 1px 1px 2px #9c0c0c, 0 0 1em rgba(0, 0, 0, 0);
+  }
+
+  .forgot-link {
+    color: #777;
+    border-bottom: 1px dotted #777;
+  }
+
+  .fixForDefaultValBrowser {
+    text-align: center;
+  }
+}
