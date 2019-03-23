@@ -2,10 +2,14 @@
 {% set resetCode  = resetPassword.code %}
 {% set valResetCode = (resetCode == defaultResetCode) ? '' : resetCode %}
 {% set isRestCode = resetCode ? true : false %}
+{% set logoPartial = __SELF__.property('logoPartial') %}
 
 <div class="block-signin">
 
     <div class="text-center mb-4 pb-1">
+        {% if logoPartial %}
+            {% partial logoPartial img_class="user-auth-logo mb-4" %}
+        {% endif %}
         <h1 class="h2 mb-3 font-weight-normal">ЛИЧНЫЙ КАБИНЕТ</h1>
     </div>
 
@@ -15,9 +19,7 @@
           data-request-validate
           data-request-flash>
 
-        <div class="alert alert-danger" data-validate-error>
-            <p data-message></p>
-        </div>
+        <div class="alert alert-danger" data-validate-error></div>
 
         <div class="form-label-group">
             <input type="email" name="email" id="authInputEmail" class="form-control fixForDefaultValBrowser" placeholder="Email" required>
