@@ -7,6 +7,7 @@ use Lang;
 use Flash;
 use Session;
 use Request;
+use Redirect;
 use Exception;
 use Validator;
 use ValidationException;
@@ -26,8 +27,8 @@ class AjaxAuth extends ComponentAccount
     public function componentDetails()
     {
         return [
-            'name'        => 'wbry.ajaxauth::lang.components.name',
-            'description' => 'wbry.ajaxauth::lang.components.description'
+            'name'        => 'wbry.ajaxauth::lang.components.ajax_auth.name',
+            'description' => 'wbry.ajaxauth::lang.components.ajax_auth.desc'
         ];
     }
 
@@ -58,6 +59,9 @@ class AjaxAuth extends ComponentAccount
     public function onRun()
     {
         parent::onRun();
+
+        if ($code = $this->activationCode())
+            return Redirect::to($this->property('redirect', '/'));
 
         if (Session::has('ajax_auth_events'))
         {
