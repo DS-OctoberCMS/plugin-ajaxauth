@@ -112,6 +112,13 @@ class AjaxAuth extends ComponentAccount
                 ! $user->checkPassword(array_get($data, 'password')))
                 throw new ValidationException(['email' => Lang::get('wbry.ajaxauth::lang.components.ajax_auth.msg.error_login_data')]);
 
+            # check if user still not activated
+            if ($user = UserModel::where(function ($query) use ($data) {
+                $query->where('email', $data['login'])->orWhere('username', $data['login']);
+            })->where('is_activated', 0)->first()){
+                throw new ValidationException(['email' => Lang::get('wbry.ajaxauth::lang.components.ajax_auth.msg.error_not_activated')]);
+            }
+
             parent::onSignin();
         }
         catch (Exception $ex) {
