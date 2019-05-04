@@ -5,6 +5,7 @@ namespace Wbry\AjaxAuth\Components;
 use App;
 use Lang;
 use Flash;
+use Event;
 use Session;
 use Request;
 use Redirect;
@@ -34,6 +35,16 @@ class AjaxAuth extends ComponentAccount
 
     public function init()
     {
+        # Success for ACTIVATE_ADMIN
+        # ==============================
+        Event::listen('rainlab.user.register', function($user, $data)
+        {
+            if (UserSettings::get('activate_mode') == UserSettings::ACTIVATE_ADMIN)
+                Flash::success(Lang::get('wbry.ajaxauth::lang.components.ajax_auth.msg.success_register_admin'));
+        });
+
+        # OctoberAuth errors
+        # =======================
         App::error(function(AuthException $e)
         {
             $appLocal = App::getLocale();
@@ -113,10 +124,16 @@ class AjaxAuth extends ComponentAccount
                 throw new ValidationException(['email' => Lang::get('wbry.ajaxauth::lang.components.ajax_auth.msg.error_login_data')]);
 
             # check if user still not activated
-            if ($user = UserModel::where(function ($query) use ($data) {
+            $user = UserModel::where(function ($query) use ($data) {
                 $query->where('email', $data['login'])->orWhere('username', $data['login']);
-            })->where('is_activated', 0)->first()){
-                throw new ValidationException(['email' => Lang::get('wbry.ajaxauth::lang.components.ajax_auth.msg.error_not_activated')]);
+            })->where('is_activated', 0)->first();
+            if ($user)
+            {
+                if (UserSettings::get('activate_mode') == UserSettings::ACTIVATE_ADMIN)
+                    $errorLang = 'wbry.ajaxauth::lang.components.ajax_auth.msg.error_not_activated_admin';
+                else
+                    $errorLang = 'wbry.ajaxauth::lang.components.ajax_auth.msg.error_not_activated_email';
+                throw new ValidationException(['email' => Lang::get($errorLang)]);
             }
 
             parent::onSignin();
