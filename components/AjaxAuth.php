@@ -136,7 +136,7 @@ class AjaxAuth extends ComponentAccount
                 throw new ValidationException(['email' => Lang::get($errorLang)]);
             }
 
-            parent::onSignin();
+            return parent::onSignin();
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
@@ -174,7 +174,7 @@ class AjaxAuth extends ComponentAccount
             if ($query->first())
                 throw new ValidationException(['email' => Lang::get('wbry.ajaxauth::lang.components.ajax_auth.msg.error_exists')]);
 
-            parent::onRegister();
+            return parent::onRegister();
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
